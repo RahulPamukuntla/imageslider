@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Slider</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<style>
+    body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #f0f0f0;
+    font-family: Arial, sans-serif;
+}
+
+.slider-container {
+    text-align: center;
+}
+
+#sliderImage {
+    width: 100%;
+    max-width: 500px;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+button {
+    margin: 10px;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+button:hover {
+    background-color: #0056b3;
+}
+
+    </style>
+    <script>
+        const images = [
+    "https://via.placeholder.com/500x300?text=Image+1",
+    "https://via.placeholder.com/500x300?text=Image+2",
+    "https://via.placeholder.com/500x300?text=Image+3",
+    "https://via.placeholder.com/500x300?text=Image+4"
+];
+
+let currentIndex = 0;
+const sliderImage = document.getElementById("sliderImage");
+
+function showImage() {
+    sliderImage.src = images[currentIndex];
+}
+
+function nextImage() {
+    currentIndex++;
+    if (currentIndex >= images.length) {
+        currentIndex = 0;
+    }
+    showImage();
+}
+
+function prevImage() {
+    currentIndex--;
+    if (currentIndex < 0) {
+        currentIndex = images.length - 1;
+    }
+    showImage();
+}
+
+// Initialize the slider
+showImage();
+
+        </script>
+<body>
+    <div class="slider-container">
+        <img id="sliderImage" src="" alt="Slider Image">
+        <button onclick="prevImage()">Previous</button>
+        <button onclick="nextImage()">Next</button>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
