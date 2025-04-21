@@ -1,89 +1,115 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Image Slider</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Family Image Slider</title>
+  <style>
     body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-    background-color: #f0f0f0;
-    font-family: Arial, sans-serif;
-}
-
-.slider-container {
-    text-align: center;
-}
-
-#sliderImage {
-    width: 100%;
-    max-width: 500px;
-    height: auto;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-button {
-    margin: 10px;
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-button:hover {
-    background-color: #0056b3;
-}
-
-    </style>
-    <script>
-        const images = [
-    "https://via.placeholder.com/500x300?text=Image+1",
-    "https://via.placeholder.com/500x300?text=Image+2",
-    "https://via.placeholder.com/500x300?text=Image+3",
-    "https://via.placeholder.com/500x300?text=Image+4"
-];
-
-let currentIndex = 0;
-const sliderImage = document.getElementById("sliderImage");
-
-function showImage() {
-    sliderImage.src = images[currentIndex];
-}
-
-function nextImage() {
-    currentIndex++;
-    if (currentIndex >= images.length) {
-        currentIndex = 0;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(to right, #fefcea, #f1da36);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
-    showImage();
-}
 
-function prevImage() {
-    currentIndex--;
-    if (currentIndex < 0) {
-        currentIndex = images.length - 1;
+    .slider-container {
+      text-align: center;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      max-width: 600px;
+      width: 90%;
+      animation: slideIn 1s ease;
     }
-    showImage();
-}
 
-// Initialize the slider
-showImage();
+    #sliderImage {
+      width: 100%;
+      max-width: 500px;
+      height: 300px;
+      object-fit: cover;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      transition: opacity 0.5s ease;
+    }
 
-        </script>
+    button {
+      margin: 15px 10px 0;
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+      transform: scale(1.05);
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
 <body>
-    <div class="slider-container">
-        <img id="sliderImage" src="" alt="Slider Image">
-        <button onclick="prevImage()">Previous</button>
-        <button onclick="nextImage()">Next</button>
+
+  <div class="slider-container">
+    <img id="sliderImage" src="" alt="Slider Image" />
+    <div>
+      <button onclick="prevImage()">Previous</button>
+      <button onclick="nextImage()">Next</button>
     </div>
-    <script src="script.js"></script>
+  </div>
+
+  <script>
+    const images = [
+      "./image1.jpg",
+      "./image2.jpg",
+      "./image3.jpg",
+      "./image4.jpg",
+      "./image5.jpg",
+      "./image6.jpg"
+      // Replace these with your actual family photo URLs
+    ];
+
+    let currentIndex = 0;
+    const sliderImage = document.getElementById("sliderImage");
+
+    function showImage() {
+      sliderImage.style.opacity = 0; // start fade out
+      setTimeout(() => {
+        sliderImage.src = images[currentIndex];
+        sliderImage.style.opacity = 1; // fade in
+      }, 300);
+    }
+
+    function nextImage() {
+      currentIndex = (currentIndex + 1) % images.length;
+      showImage();
+    }
+
+    function prevImage() {
+      currentIndex = (currentIndex - 1 + images.length) % images.length;
+      showImage();
+    }
+
+    // Initialize
+    window.onload = showImage;
+  </script>
+
 </body>
 </html>
