@@ -10,105 +10,170 @@
       padding: 0;
       background: linear-gradient(to right, #fefcea, #f1da36);
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
+      height: 100vh;
     }
 
     .slider-container {
-      text-align: center;
+      position: relative;
+      width: 80%;
+      max-width: 1000px;
+      height: 500px;
+      border-radius: 15px;
+      overflow: hidden;
       background: #fff;
-      padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-      max-width: 600px;
-      width: 90%;
-      animation: slideIn 1s ease;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
     }
 
     #sliderImage {
       width: 100%;
-      max-width: 500px;
-      height: 300px;
-      object-fit: cover;
-      border-radius: 10px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-      transition: opacity 0.5s ease;
+      height: 100%;
+      object-fit: cover; /* Ensures images cover the entire area */
+      border-radius: 15px;
+      transition: opacity 0.5s ease-in-out;
     }
 
-    button {
-      margin: 15px 10px 0;
-      padding: 10px 20px;
-      background-color: #007bff;
-      color: #fff;
+    .nav-arrows {
+      position: absolute;
+      top: 50%;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      transform: translateY(-50%);
+      z-index: 10;
+    }
+
+    .nav-arrow {
+      background-color: rgba(0, 0, 0, 0.5);
+      color: white;
+      font-size: 30px;
+      padding: 10px;
       border: none;
-      border-radius: 5px;
       cursor: pointer;
-      transition: background-color 0.3s ease, transform 0.2s ease;
+      border-radius: 50%;
+      transition: background-color 0.3s ease, transform 0.3s ease;
     }
 
-    button:hover {
-      background-color: #0056b3;
-      transform: scale(1.05);
+    .nav-arrow:hover {
+      background-color: rgba(0, 0, 0, 0.7);
+      transform: scale(1.1);
     }
 
-    @keyframes slideIn {
-      from {
+    .dots-container {
+      position: absolute;
+      bottom: 15px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 10px;
+      z-index: 10;
+    }
+
+    .dot {
+      width: 12px;
+      height: 12px;
+      background-color: rgba(255, 255, 255, 0.5);
+      border-radius: 50%;
+      transition: background-color 0.3s ease;
+      cursor: pointer;
+    }
+
+    .dot.active {
+      background-color: rgba(255, 255, 255, 1);
+    }
+
+    /* Smooth image transition effect */
+    @keyframes fadeIn {
+      0% {
         opacity: 0;
-        transform: translateY(30px);
       }
-      to {
+      100% {
         opacity: 1;
-        transform: translateY(0);
       }
     }
+
   </style>
 </head>
 <body>
 
   <div class="slider-container">
     <img id="sliderImage" src="" alt="Slider Image" />
-    <div>
-      <button onclick="prevImage()">Previous</button>
-      <button onclick="nextImage()">Next</button>
+    <div class="nav-arrows">
+      <button class="nav-arrow" onclick="prevImage()">&#10094;</button>
+      <button class="nav-arrow" onclick="nextImage()">&#10095;</button>
     </div>
+    <div class="dots-container" id="dotsContainer"></div>
   </div>
 
   <script>
     const images = [
-      "./image1.jpg",
-      "./image2.jpg",
-      "./image3.jpg",
-      "./image4.jpg",
-      "./image5.jpg",
-      "./image6.jpg"
-      // Replace these with your actual family photo URLs
+     “./image1.jpg”,
+     “./image2.jpg”,
+     “./image3.jpg”,
+     “./image4.jpg”,
+     “./image5.jpg”,
+     “./image6.jpg”
+// Add more image URLs here
     ];
 
     let currentIndex = 0;
     const sliderImage = document.getElementById("sliderImage");
+    const dotsContainer = document.getElementById("dotsContainer");
 
     function showImage() {
-      sliderImage.style.opacity = 0; // start fade out
+      sliderImage.style.opacity = 0; // Fade out the current image
       setTimeout(() => {
         sliderImage.src = images[currentIndex];
-        sliderImage.style.opacity = 1; // fade in
+        sliderImage.style.opacity = 1; // Fade in the new image
       }, 300);
+
+      updateDots();
     }
 
     function nextImage() {
-      currentIndex = (currentIndex + 1) % images.length;
+      currentIndex = (currentIndex + 1) % images.length; // Wrap around to the first image if we're at the last
       showImage();
     }
 
     function prevImage() {
-      currentIndex = (currentIndex - 1 + images.length) % images.length;
+      currentIndex = (currentIndex - 1 + images.length) % images.length; // Wrap around to the last image if we're at the first
       showImage();
     }
 
-    // Initialize
-    window.onload = showImage;
+    function goToImage(index) {
+      currentIndex = index;
+      showImage();
+    }
+
+    function updateDots() {
+      const dots = document.querySelectorAll('.dot');
+      dots.forEach(dot => dot.classList.remove('active'));
+      dots[currentIndex].classList.add('active');
+    }
+
+    // Create dots dynamically based on the number of images
+    function createDots() {
+      dotsContainer.innerHTML = ''; // Clear any existing dots
+      images.forEach((_, index) => {
+        const dot = document.createElement('div');
+        dot.classList.add('dot');
+        dot.onclick = () => goToImage(index);
+        dotsContainer.appendChild(dot);
+      });
+      updateDots();
+    }
+
+    // Auto-sliding every 3 seconds
+    setInterval(nextImage, 3000);
+
+    // Initialize the slider
+    window.onload = () => {
+      createDots();
+      showImage();
+    };
+
   </script>
 
 </body>
